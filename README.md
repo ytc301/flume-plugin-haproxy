@@ -1,27 +1,29 @@
-
-```
-$ mvn clean package
-```
-
-### HAProxyLogAvroEventSerializer
+## HAProxyLogAvroEventSerializer
 
 Flume serializer for parsing HAProxy http logs
 
 Parsing is done using regex so if your logformat is different it's easy to adapt.
 All parts of the logline are separated into distinct Acro fields for easy querying
 
-Example config:
+### Build jar
+```
+$ mvn clean package
+```
+
+and place into the flume lib dir or add to flumes classpath
+
+### Example config:
 
 ```
 agent.sinks.hdfssink.type=hdfs
-agent.sinks.hdfssink.channel=mem-channel
-agent.sinks.hdfssink.hdfs.path=/user/cloudera/log
+agent.sinks.hdfssink.channel=memChannel
+agent.sinks.hdfssink.hdfs.path=/user/cloudera/ymd=%Y%m%d/hour=%H
 agent.sinks.hdfssink.hdfs.fileType=DataStream
 agent.sinks.hdfssink.serializer=nl.telegraaf.hadoop.flume.serialization.HAProxyLogAvroEventSerializer$Builder
 ```
 
 
-## Hive table for avro output
+### Hive table for avro output
 ```
 DROP TABLE IF EXISTS haproxy_avro;
 
@@ -36,7 +38,7 @@ TBLPROPERTIES ('avro.schema.url'='hdfs:///user/<USERNAME>/nl.telegraaf.flume.HAP
 MSCK REPAIR TABLE haproxy_avro;
 ```
 
-## nl.telegraaf.flume.HAProxyEvent.avsc
+### nl.telegraaf.flume.HAProxyEvent.avsc
 ```
 {
         "type":"record",
