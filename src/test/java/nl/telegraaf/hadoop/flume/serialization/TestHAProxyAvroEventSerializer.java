@@ -89,8 +89,8 @@ public class TestHAProxyAvroEventSerializer {
             Integer statuscode = (Integer) record.get("statuscode");
             String original = record.get("original").toString();
             String timingstt = record.get("tt").toString();
-            String requestcookie = record.get("requestCookie").toString();
-            String terminationstate = record.get("terminationState").toString();
+            String requestcookie = record.get("requestcookie").toString();
+            String terminationstate = record.get("terminationstate").toString();
 
             Assert.assertEquals("Ip should be 70.208.71.125", "70.208.71.125", ip);
             System.out.println("\n\nIP " + ip + "\nrequested: " + uri + "\nstatus code: " + statuscode + "\ntimings totals: " + timingstt + "\nrequestcookie: " + requestcookie);

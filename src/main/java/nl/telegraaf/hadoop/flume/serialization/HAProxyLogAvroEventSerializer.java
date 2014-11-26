@@ -46,10 +46,10 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
                     " {\"name\": \"tr\", \"type\": \"int\" }," +
                     " {\"name\": \"tt\", \"type\": \"int\" }," +
                     " {\"name\": \"statuscode\", \"type\": \"int\" }," +
-                    " {\"name\": \"bytesRead\", \"type\": \"string\" }," +
-                    " {\"name\": \"requestCookie\", \"type\": \"string\" }," +
-                    " {\"name\": \"responseCookie\", \"type\": \"string\" }," +
-                    " {\"name\": \"terminationState\", \"type\": \"string\" }," +
+                    " {\"name\": \"bytesread\", \"type\": \"string\" }," +
+                    " {\"name\": \"requestcookie\", \"type\": \"string\" }," +
+                    " {\"name\": \"responsecookie\", \"type\": \"string\" }," +
+                    " {\"name\": \"terminationstate\", \"type\": \"string\" }," +
                     " {\"name\": \"actconn\", \"type\": \"int\" }," +
                     " {\"name\": \"feconn\", \"type\": \"int\" }," +
                     " {\"name\": \"beconn\", \"type\": \"int\" }," +
@@ -108,12 +108,12 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
             // HTTP Status code
             haproxyEvent.setStatuscode(Integer.valueOf(m.group(11)));
             // Bytes read
-            haproxyEvent.setBytesRead(m.group(12));
+            haproxyEvent.setBytesread(m.group(12));
             // Cookies
-            haproxyEvent.setRequestCookie(m.group(13));
-            haproxyEvent.setResponseCookie(m.group(14));
+            haproxyEvent.setRequestcookie(m.group(13));
+            haproxyEvent.setResponsecookie(m.group(14));
             // Termination state
-            haproxyEvent.setTerminationState(m.group(15));
+            haproxyEvent.setTerminationstate(m.group(15));
             // Connection counters
             haproxyEvent.setActconn(Integer.valueOf(m.group(16)));
             haproxyEvent.setFeconn(Integer.valueOf(m.group(17)));
@@ -174,10 +174,10 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
         private int tr;
         private int tt;
         private int statuscode;
-        private String bytesRead = "";
-        private String requestCookie = "";
-        private String responseCookie = "";
-        private String terminationState = "";
+        private String bytesread = "";
+        private String requestcookie = "";
+        private String responsecookie = "";
+        private String terminationstate = "";
         private int actconn;
         private int feconn;
         private int beconn;
@@ -206,10 +206,10 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
             builder.append(" TimingsTr: ").append(tr).append(", ");
             builder.append(" TimingsTt: ").append(tt).append(", ");
             builder.append(" Statuscode: ").append(statuscode).append(", ");
-            builder.append(" BytesRead: ").append(bytesRead).append(", ");
-            builder.append(" RequestCookie: ").append(requestCookie).append(", ");
-            builder.append(" ResponseCookie: ").append(responseCookie).append(", ");
-            builder.append(" TerminationState: ").append(terminationState).append(", ");
+            builder.append(" BytesRead: ").append(bytesread).append(", ");
+            builder.append(" RequestCookie: ").append(requestcookie).append(", ");
+            builder.append(" ResponseCookie: ").append(responsecookie).append(", ");
+            builder.append(" TerminationState: ").append(terminationstate).append(", ");
             builder.append(" Actconn: ").append(actconn).append(", ");
             builder.append(" Feconn: ").append(feconn).append(", ");
             builder.append(" Beconn: ").append(beconn).append(", ");
