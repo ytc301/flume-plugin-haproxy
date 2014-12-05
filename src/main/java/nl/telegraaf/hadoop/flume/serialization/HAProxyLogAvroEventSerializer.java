@@ -28,7 +28,7 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
     // haproxy[18439]: 70.208.71.125:1545 [24/Nov/2014:13:59:25.582] http nginx/blink182 17/0/1/4/24 200 44332 cc=clienttime-1378732583324.version-35.essential.f - ---- 2422/2288/2/1/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html} "GET /telesport/ HTTP/1.1"
 
     private static final String REGEXP =
-            "[^ ]+ ([\\d+.]+):[^ ]+ \\[(.+?)\\] (\\S+) (\\S+)/(\\S+) ([\\d+]+)/([\\d+]+)/([\\d+]+)/([\\d+]+)/([\\d+]+) ([\\d+]*) ([\\d+]*) (\\S+) (\\S+) (\\S+) ([\\d+]+)/([\\d+]+)/([\\d+]+)/([\\d+]+)/([\\d+]+) ([\\d+]+)/([\\d+]+) \\{(.*)\\} \\{(.*)\\} \"(\\S+) (\\S+) (\\S+)\"$";
+            "[^ ]+ (?<clientip>[\\d+.]+):[^ ]+ \\[(?<acceptdate>.+?)\\] (?<frontendname>\\S+) (?<backendname>\\S+)/(?<servername>\\S+) (?<timerequest>[\\d+]+)/(?<timequeue>[\\d+]+)/(?<timebackendconnect>[\\d+]+)/(?<timebackendresponse>[\\d+]+)/(?<timeduration>[\\d+]+) (?<httpstatuscode>[\\d+]*) (?<bytesread>[\\d+]*) (?<capturedrequestcookie>\\S+) (?<capturedresponsecookie>\\S+) (?<terminationstate>\\S+) (?<actconn>[\\d+]+)/(?<feconn>[\\d+]+)/(?<beconn>[\\d+]+)/(?<srvconn>[\\d+]+)/(?<retries>[\\d+]+) (?<serverqueue>[\\d+]+)/(?<backendqueue>[\\d+]+) \\{(?<capturedrequestheaders>.*)\\} \\{(?<capturedreponseheaders>.*)\\} \"(?<httpmethod>\\S+) (?<httprequest>\\S+)(\\s+(?<httpversion>\\S+)\")?";
 
 
     private static final Schema SCHEMA = new Schema.Parser().parse(
@@ -92,44 +92,44 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
         Matcher m = pattern.matcher(logline);
         if (m.matches()){
             // Client IP
-            haproxyEvent.setIp(m.group(1));
+            haproxyEvent.setIp(m.group("clientip"));
             // Request time
-            haproxyEvent.setTime(m.group(2));
+            haproxyEvent.setTime(m.group("acceptdate"));
             // Connections
-            haproxyEvent.setFrontend(m.group(3));
-            haproxyEvent.setBackend(m.group(4));
-            haproxyEvent.setServer(m.group(5));
+            haproxyEvent.setFrontend(m.group("frontendname"));
+            haproxyEvent.setBackend(m.group("backendname"));
+            haproxyEvent.setServer(m.group("servername"));
             // Connection timers
-            haproxyEvent.setTq(Integer.valueOf(m.group(6)));
-            haproxyEvent.setTw(Integer.valueOf(m.group(7)));
-            haproxyEvent.setTc(Integer.valueOf(m.group(8)));
-            haproxyEvent.setTr(Integer.valueOf(m.group(9)));
-            haproxyEvent.setTt(Integer.valueOf(m.group(10)));
+            haproxyEvent.setTq(Integer.valueOf(m.group("timerequest")));
+            haproxyEvent.setTw(Integer.valueOf(m.group("timequeue")));
+            haproxyEvent.setTc(Integer.valueOf(m.group("timebackendconnect")));
+            haproxyEvent.setTr(Integer.valueOf(m.group("timebackendresponse")));
+            haproxyEvent.setTt(Integer.valueOf(m.group("timeduration")));
             // HTTP Status code
-            haproxyEvent.setStatuscode(Integer.valueOf(m.group(11)));
+            haproxyEvent.setStatuscode(Integer.valueOf(m.group("httpstatuscode")));
             // Bytes read
-            haproxyEvent.setBytesread(m.group(12));
+            haproxyEvent.setBytesread(m.group("bytesread"));
             // Cookies
-            haproxyEvent.setRequestcookie(m.group(13));
-            haproxyEvent.setResponsecookie(m.group(14));
+            haproxyEvent.setRequestcookie(m.group("capturedrequestcookie"));
+            haproxyEvent.setResponsecookie(m.group("capturedresponsecookie"));
             // Termination state
-            haproxyEvent.setTerminationstate(m.group(15));
+            haproxyEvent.setTerminationstate(m.group("terminationstate"));
             // Connection counters
-            haproxyEvent.setActconn(Integer.valueOf(m.group(16)));
-            haproxyEvent.setFeconn(Integer.valueOf(m.group(17)));
-            haproxyEvent.setBeconn(Integer.valueOf(m.group(18)));
-            haproxyEvent.setSrvconn(Integer.valueOf(m.group(19)));
-            haproxyEvent.setRetries(Integer.valueOf(m.group(20)));
+            haproxyEvent.setActconn(Integer.valueOf(m.group("actconn")));
+            haproxyEvent.setFeconn(Integer.valueOf(m.group("feconn")));
+            haproxyEvent.setBeconn(Integer.valueOf(m.group("beconn")));
+            haproxyEvent.setSrvconn(Integer.valueOf(m.group("srvconn")));
+            haproxyEvent.setRetries(Integer.valueOf(m.group("retries")));
             // Queueus
-            haproxyEvent.setSrvqueue(Integer.valueOf(m.group(21)));
-            haproxyEvent.setBackendqueue(Integer.valueOf(m.group(22)));
+            haproxyEvent.setSrvqueue(Integer.valueOf(m.group("serverqueue")));
+            haproxyEvent.setBackendqueue(Integer.valueOf(m.group("backendqueue")));
             // Headers
-            haproxyEvent.setRequestheaders(m.group(23));
-            haproxyEvent.setResponseheaders(m.group(24));
+            haproxyEvent.setRequestheaders(m.group("capturedrequestheaders"));
+            haproxyEvent.setResponseheaders(m.group("capturedreponseheaders"));
             // Request
-            haproxyEvent.setMethod(m.group(25));
-            haproxyEvent.setUri(m.group(26));
-            haproxyEvent.setProtocol(m.group(27));
+            haproxyEvent.setMethod(m.group("httpmethod"));
+            haproxyEvent.setUri(m.group("httprequest"));
+            haproxyEvent.setProtocol(m.group("httpversion"));
         } else {
             log.warn("The event doesn't match the HAProxy LogFormat! [{}]", logline);
         }
@@ -221,7 +221,8 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
             builder.append(" Responseheaders: ").append(responseheaders).append(", ");
             builder.append(" Method: ").append(method).append(", ");
             builder.append(" URI: ").append(uri).append(", ");
-            builder.append(" Protocol: ").append(protocol).append("\" }");
+            builder.append(" Protocol: ").append(protocol).append(" }");
+            // builder.append(" Protocol: ").append(protocol).append("\" }");
             return builder.toString();
         }
     }

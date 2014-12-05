@@ -41,10 +41,14 @@ public class TestHAProxyAvroEventSerializer {
 
         // generate some events
         e = EventBuilder.withBody("haproxy[18439]: 70.208.71.125:1545 [24/Nov/2014:13:59:25.582] http nginx/blink182 17/0/1/4/24 200 44332 cc=clienttime-1378732583324.version-35.essential.f - ---- 2422/2288/2/1/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html} \"GET /telesport/ HTTP/1.1\"", Charsets.UTF_8);
+
         list.add(e);
 
-        e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET /prive/23367810/__Nicole_zoenend_op_loper__.html HTTP/1.1\"", Charsets.UTF_8);
+        e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET http://www.telegraaf.nl/telesport/voetbal/az/23415908/__Berghuis_keert__terug_bij_AZ__.html  HTTP/1.1\"", Charsets.UTF_8);
         list.add(e);
+
+        //e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET http://www.telegraaf.nl/telesport/voetbal/az/23415908/__Berghuis_keert__terug_bij_AZ__.h", Charsets.UTF_8);
+        //list.add(e);
 
         //log.info("Event: {}", e);
 
