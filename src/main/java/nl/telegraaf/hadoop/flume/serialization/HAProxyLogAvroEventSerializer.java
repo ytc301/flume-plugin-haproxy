@@ -61,7 +61,7 @@ public class HAProxyLogAvroEventSerializer extends AbstractAvroEventSerializer<H
                     " {\"name\": \"responseheaders\", \"type\": \"string\" }," +
                     " {\"name\": \"method\", \"type\": \"string\" }," +
                     " {\"name\": \"uri\", \"type\": \"string\" }," +
-                    " {\"name\": \"protocol\", \"type\": \"string\" }" +
+                    " {\"name\": \"protocol\", \"type\": [\"null\", \"string\"] }" +
                     "] }");
 
     private final OutputStream out;

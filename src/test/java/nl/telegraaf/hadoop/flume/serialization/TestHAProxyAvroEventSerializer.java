@@ -47,10 +47,10 @@ public class TestHAProxyAvroEventSerializer {
         e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET http://www.telegraaf.nl/telesport/voetbal/az/23415908/__Berghuis_keert__terug_bij_AZ__.html  HTTP/1.1\"", Charsets.UTF_8);
         list.add(e);
 
-        //e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET http://www.telegraaf.nl/telesport/voetbal/az/23415908/__Berghuis_keert__terug_bij_AZ__.h", Charsets.UTF_8);
-        //list.add(e);
+        e = EventBuilder.withBody("haproxy[13533]: 70.208.71.125:55080 [24/Nov/2014:13:59:25.609] http nginx/oasis 8/0/3/2/14 200 23067 cc=clienttime-1364315552944.version-4.essential.fu - ---- 2860/2739/9/3/0 0/0 {www.telegraaf.nl|Mozilla/5.0 (iPad; CPU OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like} {text/html;charset=UTF-8} \"GET http://www.telegraaf.nl/telesport/voetbal/az/23415908/__Berghuis_keert__terug_bij_AZ__.h", Charsets.UTF_8);
+        list.add(e);
 
-        //log.info("Event: {}", e);
+        log.info("Event: {}", e);
 
         return list;
     }
@@ -91,12 +91,15 @@ public class TestHAProxyAvroEventSerializer {
             String ip = record.get("ip").toString();
             String uri = record.get("uri").toString();
             Integer statuscode = (Integer) record.get("statuscode");
+            String frontend = record.get("frontend").toString();
             String original = record.get("original").toString();
             String timingstt = record.get("tt").toString();
             String requestcookie = record.get("requestcookie").toString();
             String terminationstate = record.get("terminationstate").toString();
 
+            Assert.assertEquals("Frontend should be 'http'", "http", frontend);
             Assert.assertEquals("Ip should be 70.208.71.125", "70.208.71.125", ip);
+
             System.out.println("\n\nIP " + ip + "\nrequested: " + uri + "\nstatus code: " + statuscode + "\ntimings totals: " + timingstt + "\nrequestcookie: " + requestcookie);
             System.out.println("Termination State: " + terminationstate);
             System.out.println("Original logline: " + original);
@@ -105,7 +108,7 @@ public class TestHAProxyAvroEventSerializer {
         }
 
         fileReader.close();
-        Assert.assertEquals("Should have found a total of 3 events", 2, numEvents);
+        Assert.assertEquals("Should have found a total of 3 events", 3, numEvents);
 
         FileUtils.forceDelete(testFile);
     }
